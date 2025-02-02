@@ -1,0 +1,48 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: '3.9'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Run unit tests
+      run: |
+        python -m unittest discover -s . -p "test_*.py"
+
+    - name: Build Docker image
+      uses: docker/build-push-action@v3
+      with:
+        context: .
+        file: Dockerfile
+        tags: user/repository:latest
+
+    # Uncomment the deployment step if deploying directly from GitHub
+    # - name: Deploy to Cloud Run
+    #   uses: google-github-actions/deploy-cloudrun@v0
+    #   with:
+    #     project_id: ${{ secrets.GCP_PROJECT }}
+    #     service: plot-population
+    #     region: us-central1
+    #     image: gcr.io/${{ secrets.GCP_PROJECT }}/plot-population:latest
