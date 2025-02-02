@@ -1,4 +1,5 @@
 import unittest
+import numpy as np
 from plot_population import calculate_mean, calculate_confidence_intervals
 
 class TestPopulationFunctions(unittest.TestCase):
