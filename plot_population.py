@@ -24,3 +24,10 @@ plt.xticks(rotation=45)
 plt.tight_layout()
 
 plt.show()
+
+
+def calculate_mean(data):
+    return sum(data) / len(data)
+
+def calculate_confidence_intervals(std_devs, sample_size):
+    return [1.96 * (std / np.sqrt(sample_size)) for std in std_devs]
